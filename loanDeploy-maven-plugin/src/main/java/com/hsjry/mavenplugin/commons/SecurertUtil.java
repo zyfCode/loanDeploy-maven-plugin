@@ -11,7 +11,7 @@ public class SecurertUtil {
 	private SecurertUtil(){}
 	
 	/**
-	 * 加密数据
+	 * 鍔犲瘑鏁版嵁
 	 * @param data
 	 * @param key
 	 * @return
@@ -24,12 +24,12 @@ public class SecurertUtil {
 			String encodeBuffer = encoder.encodeBuffer(decryptData);
 			return encodeBuffer;
 		} catch (Exception e) {
-			throw new RuntimeException("加密失败",e);
+			throw new RuntimeException("鍔犲瘑澶辫触",e);
 		}
 	}
 	
 	/**
-	 * 解密数据
+	 * 瑙ｅ瘑鏁版嵁
 	 * @param sources
 	 * @param key
 	 * @return
@@ -47,9 +47,9 @@ public class SecurertUtil {
 	
 	
 	/**
-	 * 注意不要对加密后的字节数组转成字符串(发果非常要转用BASE64编码后的数组转换成字符串)
-	 * @param bys 数组 
-	 * @param model Cipher.DECRYPT_MODE解密模式    Cipher.ENCRYPT_MODE Cipher.ENCRYPT_MODE加密模式
+	 * 娉ㄦ剰涓嶈瀵瑰姞瀵嗗悗鐨勫瓧鑺傛暟缁勮浆鎴愬瓧绗︿覆(鍙戞灉闈炲父瑕佽浆鐢˙ASE64缂栫爜鍚庣殑鏁扮粍杞崲鎴愬瓧绗︿覆)
+	 * @param bys 鏁扮粍 
+	 * @param model Cipher.DECRYPT_MODE瑙ｅ瘑妯″紡    Cipher.ENCRYPT_MODE Cipher.ENCRYPT_MODE鍔犲瘑妯″紡
 	 * @return byte[]
 	 * @throws Exception
 	 */
@@ -59,7 +59,7 @@ public class SecurertUtil {
         SecretKey desSecretKey = factory.generateSecret(desKeySpec);
         Cipher encryptDesCipher = Cipher.getInstance("DES/ECB/PKCS5Padding");
         encryptDesCipher.init(model, desSecretKey);
-        // 执行加密操作
+        // 鎵ц鍔犲瘑鎿嶄綔
         byte[]  cryptoText = encryptDesCipher.doFinal(bys,start,length);
         return cryptoText;
 	}

@@ -8,8 +8,10 @@ import java.io.InputStreamReader;
 import com.jcraft.jsch.ChannelExec;
 import com.jcraft.jsch.ChannelSftp;
 import com.jcraft.jsch.ChannelShell;
+import com.jcraft.jsch.HostKeyRepository;
 import com.jcraft.jsch.JSch;
 import com.jcraft.jsch.JSchException;
+import com.jcraft.jsch.KnownHosts;
 import com.jcraft.jsch.Session;
 
 public class SSHUtils {
@@ -21,7 +23,7 @@ public class SSHUtils {
 	private SSHUtils(){}
 	
 	/**
-	 * sshµ½linuxÉÏ
+	 * sshåˆ°linuxä¸Š
 	 * @param host
 	 * @param port
 	 * @param user
@@ -41,8 +43,34 @@ public class SSHUtils {
 			  session.connect();
 			  threadLocal.set(session);
 		} catch (JSchException e) {
-			throw new RuntimeException("Á¬½Ó·şÎñÆ÷Òì³£:::host:"+host+"  port:"+port+"  userName:"+user+"  password:"+password,e);
+			throw new RuntimeException("è¿æ¥æœåŠ¡å™¨å¼‚å¸¸:::host:"+host+"  port:"+port+"  userName:"+user+"  password:"+password,e);
 		}
+		}
+	}
+	/**
+	 * sshåˆ°linuxä¸Š
+	 * @param host
+	 * @param port
+	 * @param user
+	 * @param password
+	 * @throws RuntimeException
+	 */
+	public static void connectSSHInPublicKey(String host,int port,String user,String keyfile) throws RuntimeException{
+		Session session = threadLocal.get();
+		if(session==null){
+			try {
+				JSch jsch=new JSch();
+				jsch.addIdentity(keyfile, keyfile);
+				session = jsch.getSession(user, host, port);
+				java.util.Properties config = new java.util.Properties();
+				config.put("StrictHostKeyChecking", "no");
+				session.setConfig(config);
+//				session.setPassword(password);
+				session.connect();
+				threadLocal.set(session);
+			} catch (JSchException e) {
+				throw new RuntimeException("è¿æ¥æœåŠ¡å™¨å¼‚å¸¸:::host:"+host+"  port:"+port+"  userName:"+user,e);
+			}
 		}
 	}
 	
@@ -57,7 +85,7 @@ public class SSHUtils {
 	
 	
 	/**
-	 * Ö´ĞĞÃüÁî²¢·µ»Ø½á¹û
+	 * æ‰§è¡Œå‘½ä»¤å¹¶è¿”å›ç»“æœ
 	 * @param command
 	 * @return
 	 * @throws Exception 
@@ -98,12 +126,12 @@ public class SSHUtils {
 	public static boolean mkdirs(String linuxDirectory){
 		String execCommand = SSHUtils.execCommand("mkdirs -p "+linuxDirectory);
 		if(execCommand.contains("mkdir: cannot")){
-			throw new RuntimeException("mkdir -p "+linuxDirectory+" Ê§°Ü:::"+execCommand);
+			throw new RuntimeException("mkdir -p "+linuxDirectory+" å¤±è´¥:::"+execCommand);
 		}
 		return true;
 	}
 	/**
-	 * ²é¿´linuxÉÏµÄÄ¿Â¼ÊÇ·ñ´æÔÚ
+	 * æŸ¥çœ‹linuxä¸Šçš„ç›®å½•æ˜¯å¦å­˜åœ¨
 	 * @param parentDirectory
 	 * @param fileName
 	 * @return
@@ -120,7 +148,7 @@ public class SSHUtils {
 	}
 	
 	/**
-	 * ²é¿´ÎÄ¼şÄ¿Â¼ÊÇ·ñ´æÔÚ
+	 * æŸ¥çœ‹æ–‡ä»¶ç›®å½•æ˜¯å¦å­˜åœ¨
 	 * @param linuxDirectory
 	 * @return
 	 */
@@ -133,7 +161,7 @@ public class SSHUtils {
 	}
 	
 	/**
-	 *sftp putÎÄ¼şµ½ÏµÍ³
+	 *sftp putæ–‡ä»¶åˆ°ç³»ç»Ÿ
 	 * @param src
 	 * @param dst
 	 * @return
@@ -164,7 +192,7 @@ public class SSHUtils {
 	}
 	
 	/**
-	 * Ö´ĞĞshell½Å±¾
+	 * æ‰§è¡Œshellè„šæœ¬
 	 * @param shell
 	 * @return
 	 * @throws Exception 

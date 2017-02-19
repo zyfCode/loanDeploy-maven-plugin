@@ -1,8 +1,15 @@
 package com.hsjry.test.com;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.util.Properties;
+import java.util.Set;
 
-import org.apache.maven.model.Plugin;
 import org.junit.Test;
 
 import com.hsjry.mavenplugin.commons.CommonsUtil;
@@ -11,6 +18,21 @@ import com.hsjry.mavenplugin.domain.PluginBean;
 import com.hsjry.mavenplugin.linux.ssh.SSHUtils;
 
 public class TestPlugin {
+	
+	public Properties getLinuxPro(String fileStr){
+		try {
+			File file = new File(fileStr);
+			Properties pro = new Properties();
+			BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(file), "UTF-8"));
+			pro.load(reader);
+			reader.close();
+			return pro;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
 	
 	@Test
 	public void test5(){
@@ -44,6 +66,8 @@ public class TestPlugin {
 		System.out.println(readPropertiesFromUserHome);
 	}
 	
+
+	
 //	@Test
 //	public void test3(){
 //		PluginBean plugin = new PluginBean();
@@ -66,6 +90,76 @@ public class TestPlugin {
 		System.out.println(decryPwd);
 	}
 	
+	@Test
+	public void test11ADN20(){
+		String profile = "./linux11_20.properties";
+		String keyfile = "./zyf3linuxkey";
+		try {
+			Properties linuxPro = this.getLinuxPro(profile);
+			Set<Object> keySet = linuxPro.keySet();
+			for(Object objkey:keySet){
+				String property = linuxPro.getProperty(objkey+"");
+//				if(!property.equals("59.111.100.249")){
+//					continue;
+//				}
+				System.out.println(objkey+"="+property+"BEGIN=======================================");
+//				SSHUtils.connectSSHInPublicKey("59.111.96.103", 22,  "root");
+				SSHUtils.connectSSHInPublicKey(property, 22,  "root",keyfile);
+				String result = null;
+				result = SSHUtils.execCommand("ps -ef | grep tomcat-client");
+//				System.out.println(result);
+				if(result.contains("java")){
+					System.out.println(objkey+"="+property+"已经启动");	
+				}else{
+//					String shellScript = SSHUtils.shellScript("/sungan/tomcat-client/bin/startup.sh");
+					String execCommand = SSHUtils.execCommand("cd /sungan/tomcat-client/bin \r\n ./startup.sh");
+					System.out.println(execCommand);
+					System.out.println("bbb");
+				}
+//				/sungan/tomcat-client/bin/startup.sh
+				SSHUtils.disconnect();
+				System.out.println(objkey+"="+property+"VALUE=========================================");
+				System.out.println();
+				System.out.println();
+			}
+		} catch (RuntimeException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	@Test
+	public void test13(){
+		String profile = "./linux.properties";
+		String keyfile = "./08dfd15ac8c843338d251810c59a0a04";
+		try {
+			Properties linuxPro = this.getLinuxPro(profile);
+			Set<Object> keySet = linuxPro.keySet();
+			for(Object objkey:keySet){
+				String property = linuxPro.getProperty(objkey+"");
+				System.out.println(objkey+"="+property+"BEGIN=======================================");
+//				SSHUtils.connectSSHInPublicKey("59.111.96.103", 22,  "root");
+				SSHUtils.connectSSHInPublicKey(property, 22,  "root",keyfile);
+				String result = null;
+				result = SSHUtils.execCommand("ps -ef | grep tomcat-client");
+//				System.out.println(result);
+				if(result.contains("java")){
+					System.out.println(objkey+"="+property+"已经启动");	
+				}else{
+//					String shellScript = SSHUtils.shellScript("/sungan/tomcat-client/bin/startup.sh");
+//					String execCommand = SSHUtils.execCommand("/sungan/tomcat-client/bin/startup.sh");
+//					System.out.println(execCommand);
+//					System.out.println("bbb");
+				}
+//				/sungan/tomcat-client/bin/startup.sh
+				SSHUtils.disconnect();
+				System.out.println(objkey+"="+property+"VALUE=========================================");
+				System.out.println();
+				System.out.println();
+			}
+		} catch (RuntimeException e) {
+			e.printStackTrace();
+		}
+	}
 	@Test
 	public void test1(){
 		try {

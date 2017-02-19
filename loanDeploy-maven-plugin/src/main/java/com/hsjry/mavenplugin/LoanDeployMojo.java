@@ -32,18 +32,18 @@ public class LoanDeployMojo extends AbstractMojo {
 	@Parameter(property="restart")
 	private boolean restart;
 	/**
-	 * ÉÏ´«Ö¸¶¨µÄwar°üÃû³Æ£¨ÏµÍ³»á½«warNameÓësftpFilePropertiesÉèÖÃwar°üÃû³Æ½øĞĞÆ¥Åä£©.Èç¹û´ËÏîÎª¿Õ£¬ÔòÄ¬ÈÏÉÏ´«sftpFilePropertiesÊôĞÔÉèÖÃµÄËùÓĞ°ü
+	 * ä¸Šä¼ æŒ‡å®šçš„waråŒ…åç§°ï¼ˆç³»ç»Ÿä¼šå°†warNameä¸sftpFilePropertiesè®¾ç½®waråŒ…åç§°è¿›è¡ŒåŒ¹é…ï¼‰.å¦‚æœæ­¤é¡¹ä¸ºç©ºï¼Œåˆ™é»˜è®¤ä¸Šä¼ sftpFilePropertieså±æ€§è®¾ç½®çš„æ‰€æœ‰åŒ…
 	 */
 	@Parameter(property="m")
 	private String warName;
 	
 	/**
-	 * ½«±¾µØÄ¿Â¼ÏÂµÄÎÄµµÉÏ´«µ½linuxµÄÄ¿Â¼ keyÊÇ±¾µØÄ¿Â¼£¬valueÊÇlinuxÉÏµÄÄ¿Â¼
+	 * å°†æœ¬åœ°ç›®å½•ä¸‹çš„æ–‡æ¡£ä¸Šä¼ åˆ°linuxçš„ç›®å½• keyæ˜¯æœ¬åœ°ç›®å½•ï¼Œvalueæ˜¯linuxä¸Šçš„ç›®å½•
 	 */
 	@Parameter
 	private Properties rsyncDirectoryProperties;
 	/**
-	 * ½«±¾µØÎÄ¼şÉÏ´«µ½linuxÉÏ,keyÊÇ±¾µØÎÄ¼ş£¬valueÊÇlinuxÉÏµÄÎÄ¼ş
+	 * å°†æœ¬åœ°æ–‡ä»¶ä¸Šä¼ åˆ°linuxä¸Š,keyæ˜¯æœ¬åœ°æ–‡ä»¶ï¼Œvalueæ˜¯linuxä¸Šçš„æ–‡ä»¶
 	 */
 	@Parameter
 	private Properties warFileProperties;
@@ -74,11 +74,11 @@ public class LoanDeployMojo extends AbstractMojo {
 	}
 
 	/**
-	 * ½«war°üÉÏ´«µ½Linux,²¢ÖØÆôÏà¹Ø·şÎñ 
+	 * å°†waråŒ…ä¸Šä¼ åˆ°Linux,å¹¶é‡å¯ç›¸å…³æœåŠ¡ 
 	 * @param host
 	 */
 	private void putAndRestart(){
-		if(warName==null||warName.trim().equals("")){//ÉÏ´«ÉèÖÃµÄËùÓĞ°ü
+		if(warName==null||warName.trim().equals("")){//ä¸Šä¼ è®¾ç½®çš„æ‰€æœ‰åŒ…
 			Set<Entry<Object, Object>> entrySet = warFileProperties.entrySet();
 			for(Entry<Object, Object> entry:entrySet){
 				String sourceFileStr = entry.getKey()+"";
@@ -110,12 +110,12 @@ public class LoanDeployMojo extends AbstractMojo {
 	private void put(String sourceFileStr,String  targetFile){
 		File sourceFile = new File(sourceFileStr);
 		if(!sourceFile.exists()){
-			throw new RuntimeException(sourceFileStr+"Ä¿Â¼²»´æÔÚ");
+			throw new RuntimeException(sourceFileStr+"ç›®å½•ä¸å­˜åœ¨");
 		}
 		if(sourceFile.isDirectory()){
 			File[] listFiles = this.listWar(sourceFile);
 			if(listFiles==null||listFiles.length!=1){
-				throw new RuntimeException(sourceFile+"ÕÒµ½"+listFiles.length+"¸öwar°ü£¬ÆÚÍûÖµÊÇ1¸ö");
+				throw new RuntimeException(sourceFile+"æ‰¾åˆ°"+listFiles.length+"ä¸ªwaråŒ…ï¼ŒæœŸæœ›å€¼æ˜¯1ä¸ª");
 			}
 			sourceFile = listFiles[0];
 		}
@@ -133,7 +133,7 @@ public class LoanDeployMojo extends AbstractMojo {
 			if(linuxFileIsExist){
 				String execCommand = SSHUtils.execCommand("exec "+shutdownSHDirectory+shutdownSHFileName)+"";
 				super.getLog().info("shutdown begin..");
-				//Ğ£ÑétomcatÊÇ·ñÒÑ¾­Í£Ö¹
+				//æ ¡éªŒtomcatæ˜¯å¦å·²ç»åœæ­¢
 				while(!execCommand.contains("Connection refused")){
 					execCommand = SSHUtils.execCommand("exec "+shutdownSHDirectory+shutdownSHFileName)+"";
 					try {
@@ -143,17 +143,17 @@ public class LoanDeployMojo extends AbstractMojo {
 				}
 				super.getLog().info("shutdown finished");
 			}
-			//Çå¿Õwebapps
-			super.getLog().info("Çå¿Õwork begin...");
+			//æ¸…ç©ºwebapps
+			super.getLog().info("æ¸…ç©ºwork begin...");
 			String clear = SSHUtils.execCommand("rm -rf "+targetFile+"/../work/*");
-			super.getLog().info("Çå¿Õwork  "+clear);
+			super.getLog().info("æ¸…ç©ºwork  "+clear);
 			clear = SSHUtils.execCommand("rm -rf "+targetFile+"/../temp/*");
-			super.getLog().info("Çå¿Õtemp  "+clear);
+			super.getLog().info("æ¸…ç©ºtemp  "+clear);
 			clear = SSHUtils.execCommand("rm -rf "+targetFile+"/../logs/*");
-			super.getLog().info("Çå¿Õlogs  "+clear);
+			super.getLog().info("æ¸…ç©ºlogs  "+clear);
 			clear = SSHUtils.execCommand("rm -rf "+targetFile+"/../webapps/*");
-			super.getLog().info("Çå¿Õwebapps  "+clear);
-			super.getLog().info("Çå¿Õ  finished ");
+			super.getLog().info("æ¸…ç©ºwebapps  "+clear);
+			super.getLog().info("æ¸…ç©º  finished ");
 			String execCommand2 = SSHUtils.execCommand("exec "+targetFile+"/../bin/startup.sh");
 			super.getLog().info("startup:::"+execCommand2);
 		}

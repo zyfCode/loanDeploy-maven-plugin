@@ -26,7 +26,7 @@ public class CommonsUtil {
 	private CommonsUtil(){}
 	
 	/**
-	 * ½«properties×ª»»³Ébean
+	 * å°†propertiesè½¬æ¢æˆbean
 	 * @param clazz
 	 * @param properties
 	 * @return
@@ -45,7 +45,7 @@ public class CommonsUtil {
 				Method writeMethod = pro.getWriteMethod();
 				Class<?>[] parameterTypes = writeMethod.getParameterTypes();
 				if(parameterTypes.length!=1){
-					throw  new Exception("writeMethod ÆÚÍûÊÇÒ»¸ö£¬µ«Êµ¼ÊÉÏÊÇ£º"+parameterTypes.length);
+					throw  new Exception("writeMethod æœŸæœ›æ˜¯ä¸€ä¸ªï¼Œä½†å®é™…ä¸Šæ˜¯ï¼š"+parameterTypes.length);
 				}
 				Class<?> parameterType = parameterTypes[0];
 				if(parameterType == byte.class||parameterType == Byte.class){
@@ -58,7 +58,7 @@ public class CommonsUtil {
 					int valueOf = Integer.valueOf(value);
 					
 					if(valueOf>Character.MAX_VALUE){
-						throw new Exception("ÎŞĞ§ÊôĞÔ£º"+name+" Öµ:"+valueOf+" ³¬³ö×î´óÖµ:"+Character.MAX_VALUE);
+						throw new Exception("æ— æ•ˆå±æ€§ï¼š"+name+" å€¼:"+valueOf+" è¶…å‡ºæœ€å¤§å€¼:"+Character.MAX_VALUE);
 					}
 					
 					char valueChar = (char)valueOf;
@@ -83,12 +83,12 @@ public class CommonsUtil {
 			}
 			return targetBean;
 		} catch (Exception e) {
-			throw new RuntimeException("×ª»»Ê§°Ü",e);
+			throw new RuntimeException("è½¬æ¢å¤±è´¥",e);
 		}
 	}
 	
 	/**
-	 * ½«bean×ª»»³Épropertes
+	 * å°†beanè½¬æ¢æˆpropertes
 	 * @param sourceBean
 	 * @return
 	 */
@@ -110,12 +110,12 @@ public class CommonsUtil {
 			}
 			return properties;
 		} catch (Exception e) {
-			throw new RuntimeException("×ª»»Ê§°Ü",e);
+			throw new RuntimeException("è½¬æ¢å¤±è´¥",e);
 		}
 	}
 	
 	/**
-	 * ´ÓÁÙÊ±Ä¿Â¼¶ÁÈ¡properties
+	 * ä»ä¸´æ—¶ç›®å½•è¯»å–properties
 	 * @param pro
 	 */
 	public static Properties readPropertiesFromUserHome(String directory,String fileName){
@@ -144,7 +144,7 @@ public class CommonsUtil {
 	
 	
 	/**
-	 * °Ñproperties´æµ½ÁÙÊ±Ä¿Â¼
+	 * æŠŠpropertieså­˜åˆ°ä¸´æ—¶ç›®å½•
 	 * @param pro
 	 */
 	public static void savePropertiesToUserHome(String directory,String fileName,Properties pro){
